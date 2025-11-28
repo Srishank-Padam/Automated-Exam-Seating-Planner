@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login - examzy</title>
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables: Using the Colorful Dashboard Palette */
+        :root {
+            --primary-color: #4A148C; 
+            --secondary-color: #8E24AA; 
+            --accent-color-1: #FF8F00; 
+            --accent-color-2: #00BFA5; 
+            --background-start: #F3E5F5;
+            --background-end: #EDE7F6;
+            --text-dark: #311B92;
+            --text-medium: #616161;
+            --content-bg: rgba(255, 255, 255, 0.98); 
+            --error-color: #C62828; 
+            --success-color: #4CAF50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color-2)); 
+            color: #fff; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translate(0, 0px); } 50% { transform: translate(0, 8px); } 100% { transform: translate(0, -0px); } }
+
+        .container {
+            background: var(--content-bg);
+            padding: 40px 30px; 
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            width: 90%; 
+            max-width: 400px; 
+            text-align: center;
+            color: var(--text-dark); 
+            animation: fadeIn 0.8s ease-out;
+            border-top: 5px solid var(--accent-color-1); 
+            position: relative; 
+        }
+        
+        .logo-brand {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-color-1), var(--secondary-color));
+            color: var(--text-light);
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            animation: float 3s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-brand:hover {
+            transform: scale(1.05) translateY(-4px);
+        }
+
+        h1 { color: var(--primary-color); font-size: 28px; font-weight: 800; margin-bottom: 5px; letter-spacing: -0.5px; }
+        p { font-size: 14px; color: var(--text-medium); margin-bottom: 25px; }
+
+        .row { margin: 20px 0; text-align: left; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--secondary-color); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: 12px 10px; border: 1px solid #D1C4E9; border-radius: 6px; background-color: #fff; transition: all 0.3s ease; font-size: 16px; color: var(--text-dark); box-sizing: border-box;
+        }
+        input[type="email"]:focus, input[type="password"]:focus { outline: none; border-color: var(--accent-color-2); box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.4); }
+
+        .btn {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color)); 
+            color: #fff; padding: 12px 30px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; font-weight: 700; transition: all 0.3s ease; width: 100%; box-shadow: 0 8px 15px rgba(74, 20, 140, 0.4); letter-spacing: 1px; margin-top: 15px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(74, 20, 140, 0.6); background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); }
+
+        #loginMessage { margin-top: 20px; padding: 10px; border-radius: 6px; font-size: 14px; font-weight: 600; text-align: left; min-height: 20px; }
+        .msg-error { background-color: #ffebee; color: var(--error-color); border: 1px solid var(--error-color); }
+        .msg-success { background-color: #e8f5e9; color: var(--success-color); border: 1px solid var(--success-color); }
+
+        .helper-text { font-size: 13px; margin-top: 15px; }
+        .helper-text a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .helper-text a:hover { text-decoration: underline; }
+    </style>
+</head>
+
+<body>
+    <div class="logo-brand">Examzy</div>
+
+    <div class="container">
+        <h1>Welcome Back 👋</h1>
+        <p>Sign in to your account to access the Examzy portal.</p>
+
+        <form id="loginForm">
+            <div class="row">
+                <label for="email">Institutional Email</label>
+                <input type="email" id="email" required placeholder="example@cbit.ac.in">
+            </div>
+            
+            <div class="row">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn">LOG IN</button>
+        </form>
+        
+        <div id="loginMessage"></div>
+
+        <div class="helper-text">
+            <a href="#">Forgot Password?</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginMessage = document.getElementById('loginMessage');
+            
+            loginMessage.className = '';
+            loginMessage.textContent = '';
+            
+            const requiredDomain = '@cbit.ac.in';
+
+            if (!email || !password) {
+                loginMessage.textContent = '❌ Please enter both your email and password.';
+                loginMessage.classList.add('msg-error');
+                return;
+            }
+
+            if (!email.endsWith(requiredDomain)) {
+                loginMessage.textContent = `⚠️ Error: Email must end with ${requiredDomain}.`;
+                loginMessage.classList.add('msg-error');
+                return;
+            }
+
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (res.ok) {
+                    loginMessage.textContent = '✅ Login successful! Redirecting...';
+                    loginMessage.classList.add('msg-success');
+                    setTimeout(() => { window.location.href = '/generator'; }, 500);
+                } else {
+                    const data = await res.json();
+                    loginMessage.textContent = `❌ ${data.message || 'Login failed'}`;
+                    loginMessage.classList.add('msg-error');
+                }
+            } catch (error) {
+                loginMessage.textContent = `❌ Error: ${error.message}`;
+                loginMessage.classList.add('msg-error');
+            }
+        });
+    </script>
+</body>
+</html>
