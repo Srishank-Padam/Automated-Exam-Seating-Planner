@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Automated Exam Seating Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4A148C;
+            --secondary-color: #8E24AA;
+            --accent-color-1: #FF8F00;
+            --accent-color-2: #00BFA5;
+            --background-start: #F3E5F5;
+            --background-end: #EDE7F6;
+            --content-bg: rgba(255, 255, 255, 0.98); 
+            --text-dark: #311B92;
+            --text-medium: #616161;
+            --shadow-strong: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color-2));
+            color: #fff; 
+            transition: background 0.5s ease;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseShadow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 143, 0, 0.4); } 
+            70% { box-shadow: 0 0 0 10px rgba(255, 143, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 143, 0, 0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            background: var(--content-bg);
+            padding: 40px 60px; 
+            border-radius: 12px;
+            box-shadow: var(--shadow-strong);
+            width: 90%; 
+            max-width: 800px; 
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            color: var(--text-dark); 
+        }
+
+        h1 { color: var(--primary-color); font-size: 40px; font-weight: 800; margin-bottom: 5px; letter-spacing: -1px; animation: slideInUp 1s ease-out 0.2s backwards; }
+        p { font-size: 17px; color: var(--text-medium); margin-bottom: 25px; animation: slideInUp 1s ease-out 0.4s backwards; }
+
+        .row { text-align: left; margin: 0 auto; max-width: 500px; animation: slideInUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; }
+        .seating-form { margin: 30px 0; }
+        .upload-section { margin-bottom: 25px; padding-bottom: 5px; border-bottom: 1px solid #eee; animation-delay: 0.6s !important; }
+        .upload-section.col-2 { animation-delay: 0.7s !important; border-bottom: none; margin-bottom: 0; }
+        .upload-section p { margin-top: 5px !important; margin-bottom: 5px !important; font-size: 14px !important; }
+
+        label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--secondary-color); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .column-list { list-style: none; padding: 0; margin-top: -5px; margin-bottom: 10px; text-align: left; display: flex; flex-wrap: wrap; gap: 5px 20px; animation: none; }
+        .column-list li { font-size: 13px; color: var(--text-medium); font-style: italic; position: relative; padding-left: 15px; }
+        .column-list li::before { content: '•'; color: var(--accent-color-1); font-size: 1.2em; font-weight: 700; position: absolute; left: 0; top: -2px; }
+
+        input[type="file"], input[type="text"] { width: 100%; padding: 10px 15px; border: 2px solid #D1C4E9; border-radius: 8px; background-color: #F8F4FA; transition: all 0.3s ease; font-size: 16px; color: var(--text-dark); transform: scale(1); }
+        input[type="text"] { padding: 15px; margin-bottom: 20px; }
+        input[type="file"]:hover, input[type="text"]:hover { background-color: #EFEAF4; border-color: var(--accent-color-1); transform: scale(1.005); }
+        input[type="file"]:focus, input[type="text"]:focus { outline: none; border-color: var(--accent-color-1); animation: pulseShadow 1.5s infinite; }
+
+        .btn { background: linear-gradient(90deg, var(--accent-color-1), var(--primary-color)); color: #fff; padding: 16px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 700; transition: all 0.3s ease; width: 100%; box-shadow: 0 8px 25px rgba(255, 143, 0, 0.4); letter-spacing: 1.5px; margin-top: 25px; animation: slideInUp 1s ease-out 1s backwards; }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(255, 143, 0, 0.6); background: linear-gradient(90deg, var(--primary-color), var(--accent-color-1)); }
+
+        .btn-secondary { background: linear-gradient(90deg, var(--accent-color-2), var(--secondary-color)); color: #fff; padding: 16px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 700; transition: all 0.3s ease; width: 100%; box-shadow: 0 8px 25px rgba(0, 191, 165, 0.4); letter-spacing: 1.5px; margin-top: 20px; }
+        .btn-secondary:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0, 191, 165, 0.6); background: linear-gradient(90deg, var(--secondary-color), var(--accent-color-2)); }
+
+        .btn-bulk { background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 8px 25px rgba(74, 20, 140, 0.4); }
+        .btn-bulk:hover { background: linear-gradient(90deg, var(--secondary-color), var(--primary-color)); box-shadow: 0 15px 35px rgba(74, 20, 140, 0.6); }
+
+        hr { border: none; border-top: 1px solid #E0E0E0; margin: 40px 0; animation: fadeIn 1.5s ease-out 1.2s backwards; }
+
+        h3 { color: var(--primary-color); font-size: 24px; font-weight: 700; margin-bottom: 10px; animation: slideInUp 1s ease-out 1.4s backwards; }
+        .section-header { text-align: center; margin: 0 auto 15px; max-width: 500px; }
+        code { background: #F0F4F7; padding: 3px 8px; border-radius: 4px; color: var(--secondary-color); font-weight: 600; font-size: 95%; }
+        b { font-weight: 700; color: var(--text-dark); }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Automated Exam Seating Planner 🎓</h1>
+        <p>Upload your **two datasets** (Room Capacity & Student Enrollment) to instantly generate the seating plan.</p>
+
+        <!-- Multiple Upload Form -->
+        <form class="seating-form" id="uploadForm" method="post" enctype="multipart/form-data">
+            <div class="row upload-section">
+                <label>1. Room Capacity Data (CSV/XLSX)</label>
+                <p style="color: var(--primary-color);">Must contain these columns:</p>
+                <ul class="column-list">
+                    <li><b>RoomNo</b></li>
+                    <li><b>Capacity</b></li>
+                    <li><b style="color: var(--text-medium); font-style: italic;">(Optional: Block)</b></li>
+                </ul>
+                <input type="file" name="room_data" accept=".csv,.xlsx" required>
+            </div>
+
+            <div class="row upload-section col-2">
+                <label>2. Student Enrollment Data (CSV/XLSX)</label>
+                <p style="color: var(--primary-color);">Must contain these columns:</p>
+                <ul class="column-list">
+                    <li><b>RollNo</b></li>
+                    <li><b>SubjectName</b></li>
+                    <li><b>Date</b></li>
+                    <li><b>Session</b></li>
+                    <li><b style="color: var(--text-medium); font-style: italic;">(Optional: Name, Branch)</b></li>
+                </ul>
+                <input type="file" name="exam_data" accept=".csv,.xlsx" required>
+            </div>
+
+            <button type="submit" class="btn" style="margin-top: 25px;">✨ GENERATE SEATING PLAN</button>
+        </form>
+
+        <!-- PDF Preview -->
+        <div style="margin-top: 20px;">
+            <iframe id="pdfPreview" style="width:100%; height:500px;" hidden></iframe>
+        </div>
+
+        <hr>
+
+        <!-- Single Hall Ticket -->
+        <div class="row" data-index="3">
+            <div class="section-header">
+                <h3>Download Hall Ticket 📄</h3>
+                <p>Enter **Roll Number** to instantly download an individual Hall Ticket (PDF).</p>
+            </div>
+
+            <form action="/generate_hall_ticket/" method="get" id="hallTicketForm">
+                <label for="rollno_input">Enter Roll Number</label>
+                <input type="text" id="rollno_input" name="rollno" placeholder="e.g., 21BE01A0501" required>
+                <button type="submit" class="btn-secondary">DOWNLOAD HALL TICKET</button>
+            </form>
+        </div>
+
+        <hr>
+
+        <!-- Bulk Hall Tickets -->
+        <div class="row" data-index="4">
+            <div class="section-header">
+                <h3>Download All Hall Tickets (ZIP) 📦</h3>
+                <p>Downloads a single ZIP file containing all generated hall tickets.</p>
+            </div>
+            
+            <form action="/download_all_halltickets" method="get">
+                 <button type="submit" class="btn-secondary btn-bulk">
+                    DOWNLOAD ALL HALL TICKETS AS ZIP FILE
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const pdfPreview = document.getElementById('pdfPreview');
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(uploadForm);
+
+            // Upload files
+            const uploadRes = await fetch('/upload-multiple', {
+                method: 'POST',
+                body: formData
+            });
+            const uploadData = await uploadRes.json();
+
+            if(uploadRes.ok){
+                alert(uploadData.message);
+
+                // After successful upload, request PDF
+                const pdfRes = await fetch('/generate_room_seating_pdf');
+                if(pdfRes.ok){
+                    const blob = await pdfRes.blob();
+                    const url = URL.createObjectURL(blob);
+                    pdfPreview.src = url;
+                    pdfPreview.hidden = false;
+                } else {
+                    const err = await pdfRes.json();
+                    alert(err.error);
+                }
+
+            } else {
+                alert(uploadData.error);
+            }
+        });
+
+        // Update Hall Ticket form dynamically
+        const hallTicketForm = document.getElementById('hallTicketForm');
+        hallTicketForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            const roll = document.getElementById('rollno_input').value.trim();
+            if(!roll) return;
+            window.open(`/generate_hall_ticket/${roll}`, '_blank');
+        });
+    </script>
+</body>
+</html>
